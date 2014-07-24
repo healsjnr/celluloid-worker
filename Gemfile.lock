@@ -1,0 +1,51 @@
+GIT
+  remote: https://81e5fcc67cb980eba4375333d475c1a6a49d6f01:x-oauth-basic@github.com/otherlevels/olversion.git
+  revision: 6b4722900d95d1e9e4e4d7029ef35b85d405f02a
+  specs:
+    olversion (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    celluloid (0.15.2)
+      timers (~> 1.1.0)
+    coderay (1.1.0)
+    diff-lcs (1.2.5)
+    ffi (1.9.3-java)
+    march_hare (2.5.0-java)
+    method_source (0.8.2)
+    pry (0.10.0-java)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+      spoon (~> 0.0)
+    rake (10.3.2)
+    rspec (3.0.0)
+      rspec-core (~> 3.0.0)
+      rspec-expectations (~> 3.0.0)
+      rspec-mocks (~> 3.0.0)
+    rspec-core (3.0.3)
+      rspec-support (~> 3.0.0)
+    rspec-expectations (3.0.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.0.0)
+    rspec-mocks (3.0.3)
+      rspec-support (~> 3.0.0)
+    rspec-support (3.0.3)
+    settingslogic (2.0.9)
+    slop (3.6.0)
+    spoon (0.0.4)
+      ffi
+    timers (1.1.0)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  celluloid
+  march_hare (~> 2.5.0)
+  olversion!
+  pry
+  rake
+  rspec
+  settingslogic (~> 2.0.9)
