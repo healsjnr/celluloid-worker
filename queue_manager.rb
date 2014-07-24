@@ -26,6 +26,9 @@ class QueuePool
     @channel = @conn.create_channel
     @exchange = @channel.topic(queue_connection[:topic])
     @queue = @channel.queue(queue_connection[:queue]).bind(@exchange, :routing_key => queue_connection[:routing_key])
+  end
+
+  def start
     @queue.subscribe(:ack => true) do |metadata, payload|
       @pool.async.work(metadata, payload)
     end

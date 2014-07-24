@@ -44,6 +44,9 @@ module QueueTester
       @channel = @conn.create_channel
       @exchange = @channel.topic(QueueTester::TEST_FINISHED_EXCHANGE)
       @queue = @channel.queue(QueueTester::TEST_FINISHED_QUEUE).bind(@exchange, :routing_key => QueueTester::TEST_ROUTING_KEY)
+    end
+
+    def start
       @queue.subscribe(:ack => true) do |metadata, payload|
         work(metadata, payload)
       end
@@ -108,17 +111,14 @@ module QueueTester
     def run_test(num_messages)
       puts 'Starting Tests...'
       consumer = Consumer.new
-      raw_consumer_start = 0
       publisher = Publisher.new
-      time = 1
-      total_time = Benchmark.realtime do
-        publisher.publish(num_messages)
-        puts '  Messages published'
-        time = Benchmark.realtime do
-          raw_consumer_start = consumer.consumed
-          while ((consumer.consumed + consumer.errors) < num_messages)
-            sleep 0.01
-          end
+      publisher.publish(num_messages)
+      puts '  Messages published'
+      consumer.start
+      @worker_pool.start
+      time = Benchmark.realtime do
+        while ((consumer.consumed + consumer.errors) < num_messages)
+          sleep 0.1
         end
       end
       puts "\nTests done."
@@ -127,8 +127,7 @@ module QueueTester
       puts "  Total Consumed: #{consumer.consumed + consumer.errors}"
       puts "  Total Published: #{num_messages}"
       puts "  Time: #{time * 1000}ms"
-      puts "  Total Throughput: #{num_messages / total_time} req/s"
-      puts "  Raw Consumer Throughput: #{(num_messages - raw_consumer_start) / time} req/s"
+      puts "  Total Throughput: #{num_messages / time} req/s"
     end
   end
 end
@@ -148,4 +147,5 @@ if __FILE__ == $0
   puts "Publishing #{num_messages} messages with pool_size: #{pool_size}"
   runner = QueueTester::Runner.new(worker, pool_size)
   runner.run_test(num_messages)
+  Celluloid.shutdown
 end
